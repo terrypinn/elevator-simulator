@@ -12,6 +12,15 @@ public class Floor
         Number = number;
     }
 
+    public bool HasIdleElevators() =>
+        Elevators.Any(e => e.IsIdle());
+
+    public bool HasMovingElevatorsIn(Direction direction) =>
+        Elevators.Any(e => e.IsMovingIn(direction));
+
+    public int Difference(int other) =>
+        Math.Abs(Number - other);
+
     public override string ToString() =>
         $"floor:{Number} | elevators:{Elevators.Count}";
 }

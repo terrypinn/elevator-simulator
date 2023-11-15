@@ -14,6 +14,12 @@ public class Elevator
         _id = id;
     }
 
+    public bool IsIdle() =>
+        _direction == Direction.None;
+
+    public bool IsMovingIn(Direction direction) =>
+        _direction == direction;
+
     public override string ToString() =>
         $"id:{_id} | floor:{_currentFloor} | state:{_direction} | load:{_load}";
 }
