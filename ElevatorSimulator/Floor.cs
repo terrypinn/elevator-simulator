@@ -29,7 +29,7 @@ public class Floor
     // select elevator going in same direction or take first idle elevator
     // todo: how to handle more than 1 elevators travelling in the same direction
     public Elevator SelectElevator(int sourceFloor) =>
-        Elevators.FirstOrDefault(e => e.IsMovingIn(this.GetDirection(sourceFloor)))
+        this.Elevators.FirstOrDefault(e => e.IsMovingIn(this.GetDirection(sourceFloor)))
             ?? this.Elevators.First(e => e.IsIdle());
 
     // todo: does not handle negative numbers
@@ -41,6 +41,9 @@ public class Floor
         this.Elevators.Remove(elevator);
         nextFloor.Elevators.Add(elevator);
     }
+
+    public Elevator GetIdleElevator() =>
+        this.Elevators.Where(e => e.IsIdle()).First();
 
     public override string ToString() =>
         $"floor:{Number} | elevators:{Elevators.Count}";
