@@ -14,6 +14,24 @@ public class Elevator
         _id = id;
     }
 
+    public int GetId() => 
+        _id;
+        
+    public void SetDirection(Direction direction) =>
+        _direction = direction;
+    
+    public void Idle() =>
+        _direction = Direction.None;
+
+    public int GetLoad() =>
+        _load;
+    
+    public void AddPassengers(int load) =>
+        _load += load;
+
+    public void RemovePassengers(int load) =>
+        _load -= load;
+
     public bool IsIdle() =>
         _direction == Direction.None;
 

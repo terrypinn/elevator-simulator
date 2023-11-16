@@ -15,6 +15,6 @@ public class ElevatorRequest
         Passengers = passengers;
     }
 
-    public Direction GetDirection() => 
+    public Direction GetDirection() =>
         SourceFloor < DestinationFloor ? Direction.Up : Direction.Down;
 }

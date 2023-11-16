@@ -22,7 +22,9 @@ public class Floor
         this.Elevators.Any(e => e.IsMovingIn(this.GetDirection(sourceFloor)));
 
     public Direction GetDirection(int sourceFloor) =>
-        this.Number < sourceFloor ? Direction.Up : Direction.Down;
+        this.Number == sourceFloor
+        ? Direction.None : this.Number < sourceFloor
+        ? Direction.Up : Direction.Down;
 
     // select elevator going in same direction or take first idle elevator
     // todo: how to handle more than 1 elevators travelling in the same direction
@@ -30,17 +32,15 @@ public class Floor
         Elevators.FirstOrDefault(e => e.IsMovingIn(this.GetDirection(sourceFloor)))
             ?? this.Elevators.First(e => e.IsIdle());
 
-    // public Elevator SelectElevator(Direction direction) =>
-    //     this.FindElevatorMovingIn(direction)
-    //         ?? this.Elevators.First(e => e.IsIdle());
-
-    // 
-    // public Elevator? FindElevatorMovingIn(Direction direction) =>
-    //     Elevators.FirstOrDefault(e => e.IsMovingIn(direction));
-
     // todo: does not handle negative numbers
     public int Difference(int other) =>
         Math.Abs(Number - other);
+
+    public void MoveElevator(Floor nextFloor, Elevator elevator)
+    {
+        this.Elevators.Remove(elevator);
+        nextFloor.Elevators.Add(elevator);
+    }
 
     public override string ToString() =>
         $"floor:{Number} | elevators:{Elevators.Count}";
