@@ -4,8 +4,8 @@ namespace ElevatorSimulator;
 
 public class Elevator
 {
-    private int _id;
-    private int _currentFloor;
+    private readonly int _id;
+    private int _floor;
     private Direction _direction;
     private int _load;
 
@@ -14,18 +14,24 @@ public class Elevator
         _id = id;
     }
 
-    public int GetId() => 
+    public int GetId() =>
         _id;
-        
+
+    public int GetFloor() =>
+        _floor;
+
+    public void SetFloor(int floor) =>
+        _floor = floor;
+
     public void SetDirection(Direction direction) =>
         _direction = direction;
-    
+
     public void Idle() =>
         _direction = Direction.None;
 
     public int GetLoad() =>
         _load;
-    
+
     public void AddPassengers(int load) =>
         _load += load;
 
@@ -39,5 +45,5 @@ public class Elevator
         _direction == direction;
 
     public override string ToString() =>
-        $"id:{_id} | floor:{_currentFloor} | state:{_direction} | load:{_load}";
+        $"id:{_id} | floor:{_floor} | state:{_direction} | load:{_load}";
 }

@@ -2,7 +2,4 @@
 
 var system = new ElevatorSystem(5, 3);
 
-var request = new ElevatorRequest(sourceFloor: 1, destinationFloor: 4, passengers: 2);
-
-system.CallElevatorTo(request.SourceFloor);
-system.MoveElevatorTo(request);
+system.CallElevatorTo(new ElevatorRequest(1, 4, 2));
