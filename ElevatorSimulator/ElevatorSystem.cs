@@ -22,35 +22,43 @@ public class ElevatorSystem
 
     public void CallElevator(ElevatorRequest request)
     {
+        // get floor passengers are going to
+        var destinationFloor = this.GetFloor(request.SourceFloor);
+
         // find closest floor with idle elevators or going in same direction
         var closestFloor = _floors
-            .Where(f => f.HasIdleElevators() || f.HasMovingElevatorsTo(request.SourceFloor))
-            .OrderBy(f => f.Difference(request.SourceFloor))
+            .Where(f => f.HasIdleElevators() || f.HasMovingElevatorsTo(destinationFloor))
+            .OrderBy(f => f.Difference(destinationFloor))
             .First();
 
         // move elevator to respective floor and load elevator
-        this.MoveElevator(closestFloor, request.SourceFloor)
+        this.MoveElevator(closestFloor, destinationFloor)
             .LoadElevator(request.Passengers);
     }
 
     public void DropPassengers(ElevatorRequest request)
     {
         // get floor passengers are on
-        var currentFloor = _floors[request.SourceFloor];
+        var currentFloor = this.GetFloor(request.SourceFloor);
+
+        // get floor passengers are going to
+        var destinationFloor = this.GetFloor(request.DestinationFloor);
 
         // move elevator to respective floor and unload elevator
-        this.MoveElevator(currentFloor, request.DestinationFloor)
+        this.MoveElevator(currentFloor, destinationFloor)
             .UnloadElevator(request.Passengers);
     }
 
-    private Floor MoveElevator(Floor currentFloor, int destinationFloor)
+    private Floor GetFloor(int number) =>
+        _floors.First(f => f.Number == number);
+
+    private Floor MoveElevator(Floor currentFloor, Floor destinationFloor)
     {
         // determine direction to move elevator
         var direction = currentFloor.GetDirection(destinationFloor);
 
         // select next floor to move elevator to
-        var nextFloor = _floors[
-            _floors.IndexOf(currentFloor) + (int)direction];
+        var nextFloor = this.GetFloor(currentFloor.Number + (int)direction);
 
         // stop if elevator reached destination
         if (currentFloor.Equals(nextFloor))

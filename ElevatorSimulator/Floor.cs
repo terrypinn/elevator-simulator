@@ -15,32 +15,32 @@ public class Floor
     public bool HasIdleElevators() =>
         this.Elevators.Any(e => e.IsIdle());
 
-    public bool HasMovingElevatorsTo(int floorNumber) =>
-        this.Elevators.Any(e => e.IsMovingIn(this.GetDirection(floorNumber)));
+    public bool HasMovingElevatorsTo(Floor floor) =>
+        this.Elevators.Any(e => e.IsMovingIn(this.GetDirection(floor)));
 
-    public Direction GetDirection(int floorNumber) =>
-        this.Number == floorNumber
-        ? Direction.None : this.Number < floorNumber
+    public Direction GetDirection(Floor other) =>
+        this.Number == other.Number
+        ? Direction.None : this.Number < other.Number
         ? Direction.Up : Direction.Down;
 
     // select elevator going in same direction or take first idle elevator
     // todo: how to handle more than 1 elevators travelling in the same direction
-    public Elevator SelectElevator(int floorNumber) =>
-        this.Elevators.FirstOrDefault(e => e.IsMovingIn(this.GetDirection(floorNumber)))
+    public Elevator SelectElevator(Floor floor) =>
+        this.Elevators.FirstOrDefault(e => e.IsMovingIn(this.GetDirection(floor)))
             ?? this.Elevators.First(e => e.IsIdle());
 
     // todo: does not handle negative numbers
-    public int Difference(int other) =>
-        Math.Abs(Number - other);
+    public int Difference(Floor other) =>
+        Math.Abs(Number - other.Number);
 
-    public void MoveElevator(Floor nextFloor, int destinationFloor)
+    public void MoveElevator(Floor nextFloor, Floor destinationFloor)
     {
         // find available elevator
         var elevator = this.SelectElevator(destinationFloor);
 
         // update elevator status
         elevator.SetFloor(nextFloor.Number);
-        elevator.SetDirection(this.GetDirection(nextFloor.Number));
+        elevator.SetDirection(this.GetDirection(nextFloor));
 
         // move elevator between floors
         this.Elevators.Remove(elevator);
@@ -52,10 +52,10 @@ public class Floor
 
     // todo: need to confirm available elevator on floor
     public void LoadElevator(int load) =>
-        this.SelectElevator(this.Number).AddPassengers(load);
+        this.SelectElevator(this).AddPassengers(load);
 
     public void UnloadElevator(int load) =>
-       this.SelectElevator(this.Number).RemovePassengers(load);
+       this.SelectElevator(this).RemovePassengers(load);
 
     public override string ToString() =>
         $"floor:{Number} | elevators:{Elevators.Count}";
