@@ -36,7 +36,7 @@ public class Floor
     public void MoveElevator(Floor nextFloor, Floor destinationFloor)
     {
         // find available elevator
-        var elevator = this.SelectElevator(destinationFloor);
+        Elevator elevator = this.SelectElevator(destinationFloor);
 
         // update elevator status
         elevator.SetFloor(nextFloor.Number);

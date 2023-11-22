@@ -23,10 +23,10 @@ public class ElevatorSystem
     public void CallElevator(ElevatorRequest request)
     {
         // get floor passengers are going to
-        var destinationFloor = this.GetFloor(request.SourceFloor);
+        Floor destinationFloor = this.GetFloor(request.SourceFloor);
 
         // find closest floor with idle elevators or going in same direction
-        var closestFloor = _floors
+        Floor closestFloor = _floors
             .Where(f => f.HasIdleElevators() || f.HasMovingElevatorsTo(destinationFloor))
             .OrderBy(f => f.Difference(destinationFloor))
             .First();
@@ -39,10 +39,10 @@ public class ElevatorSystem
     public void DropPassengers(ElevatorRequest request)
     {
         // get floor passengers are on
-        var currentFloor = this.GetFloor(request.SourceFloor);
+        Floor currentFloor = this.GetFloor(request.SourceFloor);
 
         // get floor passengers are going to
-        var destinationFloor = this.GetFloor(request.DestinationFloor);
+        Floor destinationFloor = this.GetFloor(request.DestinationFloor);
 
         // move elevator to respective floor and unload elevator
         this.MoveElevator(currentFloor, destinationFloor)
