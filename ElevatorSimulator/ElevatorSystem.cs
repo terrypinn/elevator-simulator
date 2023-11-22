@@ -54,11 +54,9 @@ public class ElevatorSystem
 
     private Floor MoveElevator(Floor currentFloor, Floor destinationFloor)
     {
-        // determine direction to move elevator
-        var direction = currentFloor.GetDirection(destinationFloor);
-
         // select next floor to move elevator to
-        var nextFloor = this.GetFloor(currentFloor.Number + (int)direction);
+        Floor nextFloor = this.GetFloor(
+            currentFloor.GetNextFloorNumber(destinationFloor));
 
         // stop if elevator reached destination
         if (currentFloor.Equals(nextFloor))

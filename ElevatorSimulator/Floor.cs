@@ -18,14 +18,14 @@ public class Floor
     public bool HasMovingElevatorsTo(Floor floor) =>
         this.Elevators.Any(e => e.IsMovingIn(this.GetDirection(floor)));
 
-    public Direction GetDirection(Floor other) =>
+    private Direction GetDirection(Floor other) =>
         this.Number == other.Number
         ? Direction.None : this.Number < other.Number
         ? Direction.Up : Direction.Down;
 
     // select elevator going in same direction or take first idle elevator
     // todo: how to handle more than 1 elevators travelling in the same direction
-    public Elevator SelectElevator(Floor floor) =>
+    private Elevator SelectElevator(Floor floor) =>
         this.Elevators.FirstOrDefault(e => e.IsMovingIn(this.GetDirection(floor)))
             ?? this.Elevators.First(e => e.IsIdle());
 
@@ -46,7 +46,7 @@ public class Floor
         this.Elevators.Remove(elevator);
         nextFloor.Elevators.Add(elevator);
 
-        // idle elevator once it has reached destination
+        // idle elevator once if it has reached destination
         elevator.SetDirection(nextFloor.GetDirection(destinationFloor));
     }
 
@@ -56,6 +56,9 @@ public class Floor
 
     public void UnloadElevator(int load) =>
        this.SelectElevator(this).RemovePassengers(load);
+
+    public int GetNextFloorNumber(Floor destinationFloor) =>
+        this.Number + (int)this.GetDirection(destinationFloor);
 
     public override string ToString() =>
         $"floor:{Number} | elevators:{Elevators.Count}";
